@@ -40,9 +40,9 @@ v = 2
 phi =0
 A = 1
 shape = (200,100)
-harmonic_function = ...
-spectrum_of_harmonic_function = ...
-amplitude_spectrum= ...
+harmonic_function = create_harmonic_function(u, v, phi, A, shape)
+spectrum_of_harmonic_function = fft2(harmonic_function)
+amplitude_spectrum= fftshift(np.abs(spectrum_of_harmonic_function))
 
 plt.figure()
 plt.subplot(1,2,1)
@@ -65,10 +65,10 @@ plt.show()
 
 # Měnte vstupní parametry harmonické funkce a pozorujte jejich vliv na výstupní obraz a jeho spektrum.
 plt.close('all')
-us = ...
-vs = ...
-phi = ...
-A = ...
+us = [1, 3, 5]
+vs = [0, 2, 4]
+phi = 0
+A = 1
 shape = (200,100)
 
 
@@ -112,9 +112,9 @@ y = 200
 a = 20
 b = 20
 
-img = generate_rectangle(...)
-ampl_spectrum = ...
-shape = ...
+img = generate_rectangle(x, y, a, b)
+ampl_spectrum = fftshift(np.abs(fft2(img)))
+shape = np.shape(img)
 
 plt.figure()
 plt.subplot(1,2,1)
@@ -133,8 +133,8 @@ plt.yticks(ticks=np.linspace(start = shape[0], stop = 0, num = shape[0]//2), lab
 plt.show()
 
 # # Měnte vstupní parametry A a B funkce a pozorujte jejich vliv na výstupní obraz a jeho spektrum.
-a_s = ...
-b_s = ...
+a_s = 10
+b_s = 10
 
 plt.figure()
 
@@ -149,7 +149,7 @@ plt.close('all')
 
 # Načtěte nultý kanál podvzorkovaného obrazu loga komety 'kometa_brno_podvzorkovana.png'
 img = imread('data/kometa_brno_podvzorkovana.png')[:, :,0]
-spectrum = ...
+spectrum = fft2(img)
 
 # Zobrazte tento obraz spolu s jeho amplitudovým a fázovým spektrem
 shape = np.shape(img)
@@ -227,13 +227,13 @@ plt.ylabel('Prostorova souradnice [m]')
 plt.show()
 
 # Vypočtěte jejich spektra a do jednoho figure zobrazte amplitudovou a fázovou část spektra.
-IMG_1=...
-IMG_2=...
+IMG_1 = fft2(img_1)
+IMG_2 = fft2(img_2)
 
-amplitude_kometa=...
-phase_kometa=...
-amplitude_sparta=...
-phase_sparta=...
+amplitude_kometa=np.abs(IMG_1)
+phase_kometa=np.angle(IMG_1)
+amplitude_sparta=np.abs(IMG_2)
+phase_sparta=np.angle(IMG_2)
 
 shape = np.shape(amplitude_kometa)
 
@@ -274,11 +274,11 @@ plt.yticks(ticks=np.linspace(start = shape[0], stop = 0, num = 20), labels=np.li
 plt.show()
 
 # Prohoďte amplitudová a fázová spektra obou obrazů a zobrazte obrazy po prohození v originální oblasti.
-IMG1_changed=...
-IMG2_changed=...
+IMG1_changed=amplitude_kometa * np.exp(1j * phase_sparta)
+IMG2_changed=amplitude_sparta * np.exp(1j * phase_kometa)
 
-img1_mixed=...
-img2_mixed=...
+img1_mixed=np.real(ifft2(IMG1_changed))
+img2_mixed=np.real(ifft2(IMG2_changed))
 
 plt.figure()
 plt.subplot(121)
